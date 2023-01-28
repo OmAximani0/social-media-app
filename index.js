@@ -1,5 +1,6 @@
 const express = require("express");
-const morgan = require("morgan")
+const morgan = require("morgan");
+const mongoose = require("mongoose");
 
 // Configure environment variable
 require("dotenv").config();
@@ -7,11 +8,18 @@ const PORT = process.env.PORT || 5000;
 
 const app = express();
 
-app.use(morgan("dev"))
+app.use(morgan("dev"));
 
 // Setup Routes
-const UserRoutes = require("./routes/user.routes")
-app.use(UserRoutes)
+const UserRoutes = require("./routes/user.routes");
+app.use(UserRoutes);
+
+mongoose.connect(process.env.ATLAS_URI);
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "connection error: "));
+db.once("open", function () {
+  console.log("Connected successfully");
+});
 
 app.get("/", (req, res) => {
   res.send("Welcome to my Social Media App");
