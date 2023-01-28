@@ -9,6 +9,10 @@ const app = express();
 
 app.use(morgan("dev"))
 
+// Setup Routes
+const UserRoutes = require("./routes/user.routes")
+app.use(UserRoutes)
+
 app.get("/", (req, res) => {
   res.send("Welcome to my Social Media App");
 });
