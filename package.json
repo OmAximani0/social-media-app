@@ -1,0 +1,25 @@
+{
+  "name": "social-media-app",
+  "version": "1.0.0",
+  "description": "A backend project like social media",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OmAximani0/social-media-app.git"
+  },
+  "keywords": [
+    "Nodejs",
+    "Express",
+    "MongoDB",
+    "mongoose"
+  ],
+  "author": "Om Aximani",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OmAximani0/social-media-app/issues"
+  },
+  "homepage": "https://github.com/OmAximani0/social-media-app#readme"
+}
