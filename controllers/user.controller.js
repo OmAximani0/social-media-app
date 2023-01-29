@@ -97,7 +97,7 @@ class UserController {
     // Check if user trying to follow himself
     if (currentUser.email === user.email) {
       return res.json({
-        message: "You cannot follow yourself",
+        message: "You cannot follow/unfollow yourself",
       });
     }
 
@@ -121,7 +121,7 @@ class UserController {
     currentUser.following.push(user._id);
     await currentUser.save();
 
-    return res.json({
+    res.json({
       message: `Following '${user.username}'`,
     });
 
@@ -129,8 +129,53 @@ class UserController {
   }
 
   static async unfollow(req, res, next) {
-    let username = req.params.username;
-    res.send(`UNFOLLOWED ${username}`);
+    const username = req.params.username;
+    if (!username) {
+      return res.status(400).json({
+        message: "Username not provided!",
+      });
+    }
+
+    const user = await UserModel.findOne({ username });
+
+    if (!user) {
+      return res.status(400).json({
+        message: `User with username '${username}' not found!`,
+      });
+    }
+
+    const currentUser = req.user;
+
+    // Check if user trying to follow himself
+    if (currentUser.email === user.email) {
+      return res.json({
+        message: "You cannot follow/unfollow yourself",
+      });
+    }
+
+    let alreadyFollowing = false;
+    currentUser.following.forEach((userId) => {
+      if (userId.equals(user._id)) {
+        alreadyFollowing = true;
+      }
+    });
+
+    if (alreadyFollowing) {
+      user.followers.pull(currentUser._id);
+      await user.save();
+
+      currentUser.following.pull(user._id);
+      await currentUser.save();
+
+      return res.json({
+        message: `Unfollowed '${user.username}'`,
+      });
+    }
+
+    res.json({
+      message: `Already not following ${user.username}`,
+    });
+
     next();
   }
 }
