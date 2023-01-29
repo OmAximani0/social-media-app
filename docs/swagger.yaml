@@ -1,0 +1,86 @@
+openapi: 3.0.0
+info:
+  title: Social Media API
+  description: A replica of social media app
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:5000
+    description: Local Server For Testing
+
+paths:
+  # Create User
+  /users:
+    post:
+      summary: Creates a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+
+  # Get User
+  /users/{userName}:
+    get:
+      summary: Gets user with username
+      parameters:
+        - in: path
+          name: userName
+          schema:
+            type: string
+          required: true
+          description: Username of user in
+
+  # Folow / Unfollow A User
+  /users/{userName}/follow:
+    post:
+      summary: Follows the user
+      parameters:
+        - in: path
+          name: userName
+          schema:
+            type: string
+          required: true
+          description: Username of user whom to follow
+
+    delete:
+      summary: Unfollows a user
+      parameters:
+        - in: path
+          name: userName
+          schema:
+            type: string
+          required: true
+          description: Username of user whom to unfollow
+
+  # Get Followers Of User
+  /users/{userName}/followers:
+    get:
+      summary: Gets followers of user
+      parameters:
+        - in: path
+          name: userName
+          schema:
+            type: string
+          required: true
+          description: Username of user whoms followers we want
+
+  # Get Following Of User
+  /users/{userName}/following:
+    get:
+      summary: Gets following of user
+      parameters:
+        - in: path
+          name: userName
+          schema:
+            type: string
+          required: true
+          description: Username of user whoms following we want

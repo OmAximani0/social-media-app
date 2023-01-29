@@ -2,6 +2,9 @@ const express = require("express");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
 const passport = require("./config/passport");
+const swaggerUi = require("swagger-ui-express");
+const YAML = require("yamljs");
+const swaggerDocument = YAML.load("./docs/swagger.yaml");
 
 // Configure environment variable
 require("dotenv").config();
@@ -28,6 +31,8 @@ db.once("open", function () {
 app.get("/", (req, res) => {
   res.send("Welcome to my Social Media App");
 });
+
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.listen(PORT, () => {
   console.log(`[ SERVER ] : http://127.0.0.1:${PORT} is ready !`);
