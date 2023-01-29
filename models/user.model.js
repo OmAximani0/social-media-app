@@ -28,12 +28,6 @@ const UserSchema = Schema({
   },
 });
 
-UserSchema.pre("save", async function (next) {
-  const hash = await bcrypt.hash(this.password, 12);
-  this.password = hash;
-  next();
-});
-
 UserSchema.methods.validatePassword = async (pass) => {
   return await bcrypt.compare(pass, this.password);
 };

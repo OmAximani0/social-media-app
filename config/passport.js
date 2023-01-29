@@ -3,6 +3,7 @@ const LocalStratergy = require("passport-local");
 const BearerStratergy = require("passport-http-bearer");
 const UserModel = require("../models/user.model");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 passport.use(
   "create",
@@ -21,9 +22,11 @@ passport.use(
         return done(null, false);
       }
 
+      const hashPassword = await bcrypt.hash(password, 12);
+
       const user = await UserModel.create({
         email,
-        password,
+        password: hashPassword,
         username,
       });
       return done(null, user);
