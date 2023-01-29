@@ -1,9 +1,14 @@
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const UserModel = require("../models/user.model");
+const { validationResult } = require("express-validator");
 
 class UserController {
   static async create(req, res, next) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
     passport.authenticate(
       "create",
       {
@@ -86,9 +91,9 @@ class UserController {
 
     const followersUsername = () => {
       const userNames = [];
-      followersUser.forEach(user => userNames.push(user.username))
+      followersUser.forEach((user) => userNames.push(user.username));
       return userNames;
-    }
+    };
 
     res.status(200).json({
       username: user.username,
@@ -120,9 +125,9 @@ class UserController {
 
     const followingUsername = () => {
       const userNames = [];
-      followingUser.forEach(user => userNames.push(user.username))
+      followingUser.forEach((user) => userNames.push(user.username));
       return userNames;
-    }
+    };
 
     res.status(200).json({
       username: user.username,
