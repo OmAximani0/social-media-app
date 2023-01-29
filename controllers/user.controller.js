@@ -65,14 +65,70 @@ class UserController {
   }
 
   static async getFollowers(req, res, next) {
-    let username = req.params.username;
-    res.send(`LIST OF FOLLOWERS OF ${username}`);
+    const username = req.params.username;
+    if (!username) {
+      return res.status(400).json({
+        message: "Username not provided!",
+      });
+    }
+
+    const user = await UserModel.findOne({ username });
+
+    if (!user) {
+      return res.status(400).json({
+        message: `User with username '${username}' not found!`,
+      });
+    }
+
+    const followersUser = await UserModel.find({
+      _id: { $in: user.followers },
+    });
+
+    const followersUsername = () => {
+      const userNames = [];
+      followersUser.forEach(user => userNames.push(user.username))
+      return userNames;
+    }
+
+    res.status(200).json({
+      username: user.username,
+      followers: followersUsername(),
+    });
+
     next();
   }
 
   static async getFollowing(req, res, next) {
-    let username = req.params.username;
-    res.send(`LIST OF FOLLOWING OF ${username}`);
+    const username = req.params.username;
+    if (!username) {
+      return res.status(400).json({
+        message: "Username not provided!",
+      });
+    }
+
+    const user = await UserModel.findOne({ username });
+
+    if (!user) {
+      return res.status(400).json({
+        message: `User with username '${username}' not found!`,
+      });
+    }
+
+    const followingUser = await UserModel.find({
+      _id: { $in: user.following },
+    });
+
+    const followingUsername = () => {
+      const userNames = [];
+      followingUser.forEach(user => userNames.push(user.username))
+      return userNames;
+    }
+
+    res.status(200).json({
+      username: user.username,
+      following: followingUsername(),
+    });
+
     next();
   }
 
